@@ -959,7 +959,7 @@ def download(
         ``args``.  Optional
     :param version_selector: Specify algorithm to select the candidate version
         of a package.  Defaults to ``VersionSelector.LATEST``
-    :return package headers of downloaded templates
+    :return: package headers of downloaded templates
     """
     if dl_list is None:
         dl_list = get_dl_list(args, app, version_selector=version_selector)
