@@ -18,6 +18,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import re
 import sys
 import subprocess
 sys.path.insert(0, os.path.abspath('..'))
@@ -134,6 +135,35 @@ todo_include_todos = True
 autodoc_mock_imports = [
     'rpm',
 ]
+
+intersphinx_mapping = {
+    'python': ('http://docs.python.org/', None),
+    'qubes-doc': ('https://doc.qubes-os.org/en/latest/', None),
+    'core-admin': ('https://dev.qubes-os.org/projects/core-admin/en/latest/', None),
+    'core-qrexec': ('https://dev.qubes-os.org/projects/qubes-core-qrexec/en/stable/', None),
+}
+
+if limit := os.environ.get("QUBES_DOC_LOCAL_INTERSPHINX_CACHE_LIMIT"):
+    intersphinx_cache_limit = int(limit)
+
+if os.environ.get("QUBES_DOC_LOCAL_INTERSPHINX", "").lower() in ("true", "on", "1"):
+    local_pattern = os.environ.get(
+        "QUBES_DOC_LOCAL_INTERSPHINX_PATTERN", "../../{path}/_build/html"
+    )
+    for repo, (target, inventory) in intersphinx_mapping.items():
+        if re.match(r'https://(dev|doc)\.qubes-os.org/', target):
+            variable_name = "QUBES_DOC_LOCAL_INTERSPHINX_TARGET_{}".format(repo.replace('-', '_').upper())
+            new_target = os.environ.get(variable_name)
+
+            if not new_target:
+                if repo == "qubes-doc":
+                    path = repo
+                else:
+                    path = "qubes-{name}/doc".format(name=repo.removeprefix('qubes-'))
+                new_target = local_pattern.format(path=path)
+
+            intersphinx_mapping[repo] = (new_target, inventory)
+
 
 # -- Options for HTML output ----------------------------------------------
 
