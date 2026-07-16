@@ -29,6 +29,8 @@ Requires:   zstd
 Requires:   qubes-rpm-oxide >= 0.2.3
 Requires:   xrandr
 Requires:   qubes-core-qrexec >= 4.4.2
+# for column
+Requires:   util-linux
 
 BuildArch:  noarch
 
