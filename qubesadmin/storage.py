@@ -255,7 +255,7 @@ class Volume:
 
     def is_outdated(self) -> bool:
         """Returns `True` if this snapshot of a source volume (for
-        `snap_on_start`=True) is outdated.
+        `snap_on_start` = True) is outdated.
         """
         try:
             self._fetch_info()
